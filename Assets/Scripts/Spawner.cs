@@ -10,27 +10,22 @@ public class Spawner : MonoBehaviour
 
     private int _targetSpawnIndex;
     private Transform _targetSpawnPosition;
-    private bool _canThisBeSpawn = true;
 
-    private void Update()
+    private void Start()
     {
-        if (_canThisBeSpawn == true)
-        {
-            StartCoroutine(SpawnEnemy());
-        }
+        StartCoroutine(SpawnEnemy());
     }
 
     private IEnumerator SpawnEnemy()
     {
-        _canThisBeSpawn = false;
+        while (true)
+        {
+            _targetSpawnIndex = Random.Range(0, _spawnPoints.Count);
+            _targetSpawnPosition = _spawnPoints[_targetSpawnIndex].transform;
 
-        _targetSpawnIndex = Random.Range(0, _spawnPoints.Count);
-        _targetSpawnPosition = _spawnPoints[_targetSpawnIndex].GetComponent<Transform>();
+            Instantiate(_enemyPrefab, _targetSpawnPosition);
 
-        Instantiate(_enemyPrefab, _targetSpawnPosition);
-
-        yield return new WaitForSeconds(_timeBetweenSpawn);
-
-        _canThisBeSpawn = true;
+            yield return new WaitForSeconds(_timeBetweenSpawn);
+        }
     }
 }
